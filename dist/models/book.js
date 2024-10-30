@@ -14,6 +14,9 @@ const Book = connection_1.default.define('Book', {
     },
     stock: {
         type: sequelize_1.DataTypes.NUMBER
+    },
+    isbn: {
+        type: sequelize_1.DataTypes.STRING
     }
 }, {
     createdAt: false,

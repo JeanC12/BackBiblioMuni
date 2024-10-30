@@ -9,6 +9,9 @@ const Book = db.define('Book', {
     },
     stock: {
         type: DataTypes.NUMBER
+    },
+    isbn: {
+        type: DataTypes.STRING
     }
 },
     {
