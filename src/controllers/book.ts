@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Book from "../models/book";
-export const getBooks = async (req: Request, res: Response) => {
 
+export const getBooks = async (req: Request, res: Response) => {
     const listBooks = await Book.findAll();
     res.json(listBooks);
 }
@@ -53,7 +53,6 @@ export const updateBook = async (req: Request, res: Response) => {
     const { body } = req;
     const { id } = req.params;
     try {
-        const alumno = await Book.findByPk(id);
         if (Book) {
             await Book.update(body, {
                 where: { id: id }

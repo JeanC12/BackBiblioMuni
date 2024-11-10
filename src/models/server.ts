@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import routesBook from '../routes/book';
+import routesAuth from '../routes/auth';
 import db from '../db/connection';
 import cors from 'cors';
 class Server {
@@ -25,6 +26,7 @@ class Server {
             })
         });
         this.app.use('/api/books', routesBook);
+        this.app.use('/auth', routesAuth);
     }
     middlewares() {
         this.app.use(express.json());

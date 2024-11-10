@@ -68,7 +68,6 @@ const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { body } = req;
     const { id } = req.params;
     try {
-        const alumno = yield book_1.default.findByPk(id);
         if (book_1.default) {
             yield book_1.default.update(body, {
                 where: { id: id }
