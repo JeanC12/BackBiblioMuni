@@ -9,6 +9,12 @@ const connection_1 = __importDefault(require("../db/connection"));
 class Book extends sequelize_1.Model {
 }
 Book.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true // Agrega esta propiedad para el autoincremento
+    },
     title: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false

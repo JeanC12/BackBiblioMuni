@@ -20,6 +20,12 @@ class Book extends Model<BookAttributes> implements BookAttributes {
 }
 
 Book.init({
+    id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true  // Agrega esta propiedad para el autoincremento
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false
