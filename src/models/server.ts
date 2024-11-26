@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import routesBook from '../routes/book';
+import routesUser from '../routes/user';
 import routesAuth from '../routes/auth';
 import db from '../db/connection';
 import cors from 'cors';
@@ -26,6 +27,7 @@ class Server {
             })
         });
         this.app.use('/api/books', routesBook);
+        this.app.use('/api/users',routesUser);
         this.app.use('/auth', routesAuth);
     }
     middlewares() {

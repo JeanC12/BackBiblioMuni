@@ -35,28 +35,54 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = void 0;
 const jwt = __importStar(require("jsonwebtoken"));
 const bcrypt = __importStar(require("bcryptjs"));
-// Simulación de usuarios almacenados (consider using a secure database)
+// Simulated users database
 const users = [
     { user_id: 0, user_name: 'admin', user_password: bcrypt.hashSync('1234', 10), user_role: 'admin' },
+    { user_id: 1, user_name: 'user', user_password: bcrypt.hashSync('1234', 10), user_role: 'user' }
 ];
-// Función para autenticación de usuarios
+// Login controller function
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const { user_name, user_password } = req.body;
-    // Find user by username
-    const user = users.find(u => u.user_name === user_name);
-    if (!user) {
-        return res.status(401).send('Credenciales inválidas'); // User not found
+    try {
+        const { user_name, user_password } = req.body;
+        // Validate input
+        if (!user_name || !user_password) {
+            return res.status(400).json({ error: 'Nombre de usuario y contraseña son obligatorios.' });
+        }
+        // Find user by username
+        const user = users.find(u => u.user_name === user_name);
+        if (!user) {
+            return res.status(401).json({ error: 'Credenciales inválidas' });
+        }
+        // Validate password
+        const validPassword = yield bcrypt.compare(user_password, user.user_password);
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Credenciales inválidas' });
+        }
+        // Generate JWT token
+        const secretKey = process.env.SECRET_KEY;
+        if (!secretKey) {
+            console.error('SECRET_KEY no está definido en las variables de entorno.');
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+        const token = jwt.sign({
+            id: user.user_id,
+            name: user.user_name, // Incluir nombre
+            role: user.user_role, // Incluir rol
+        }, secretKey, { expiresIn: '1h' });
+        // Send response
+        return res.json({
+            auth: true,
+            token: token,
+            user: {
+                id: user.user_id,
+                name: user.user_name,
+                role: user.user_role
+            }
+        });
     }
-    // Validate password using bcrypt.compare (never compare plain text passwords)
-    const validPassword = yield bcrypt.compare(user_password, user.user_password); // Async operation
-    if (!validPassword) {
-        return res.status(401).send('Credenciales inválidas'); // Invalid password
+    catch (err) {
+        console.error('Error en el controlador de login:', err);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
-    // Generate token JWT
-    const secretKey = (_a = process.env.SECRET_KEY) !== null && _a !== void 0 ? _a : '';
-    ;
-    const token = jwt.sign({ id: user.user_id, role: user.user_role }, secretKey, { expiresIn: '1h' });
-    return res.json({ auth: true, token: token });
 });
 exports.login = login;

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import Book from "../models/book";
 
+
+
 export const getBooks = async (req: Request, res: Response) => {
     const listBooks = await Book.findAll();
     res.json(listBooks);
@@ -74,3 +76,26 @@ export const updateBook = async (req: Request, res: Response) => {
         });
     }
 }
+
+export const lendBook = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const book = await Book.findByPk(id);
+        if (book) {
+            if (book.stock > 0) {
+                book.stock -= 1; // Restamos uno al stock
+                await book.save(); // Guardamos el libro con el stock actualizado
+                res.json({
+                    msg: `El préstamo del libro con id ${id} fue realizado con éxito.`,
+                    stock: book.stock
+                });
+            } else {
+                res.status(400).json({ msg: "No hay suficiente stock para realizar el préstamo." });
+            }
+        } else {
+            res.status(404).json({ msg: `No existe un libro con el id ${id}` });
+        }
+    } catch (error) {
+        res.status(500).json({ msg: "Ocurrió un error al realizar el préstamo." });
+    }
+};

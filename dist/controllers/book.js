@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateBook = exports.postBook = exports.deleteBook = exports.getBook = exports.getBooks = void 0;
+exports.lendBook = exports.updateBook = exports.postBook = exports.deleteBook = exports.getBook = exports.getBooks = void 0;
 const book_1 = __importDefault(require("../models/book"));
 const getBooks = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const listBooks = yield book_1.default.findAll();
@@ -92,3 +92,29 @@ const updateBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateBook = updateBook;
+const lendBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const book = yield book_1.default.findByPk(id);
+        if (book) {
+            if (book.stock > 0) {
+                book.stock -= 1; // Restamos uno al stock
+                yield book.save(); // Guardamos el libro con el stock actualizado
+                res.json({
+                    msg: `El préstamo del libro con id ${id} fue realizado con éxito.`,
+                    stock: book.stock
+                });
+            }
+            else {
+                res.status(400).json({ msg: "No hay suficiente stock para realizar el préstamo." });
+            }
+        }
+        else {
+            res.status(404).json({ msg: `No existe un libro con el id ${id}` });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ msg: "Ocurrió un error al realizar el préstamo." });
+    }
+});
+exports.lendBook = lendBook;

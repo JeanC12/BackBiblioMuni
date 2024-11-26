@@ -5,20 +5,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const connection_1 = __importDefault(require("../db/connection"));
-const Book = connection_1.default.define('Book', {
+// Extend Model with the interface
+class Book extends sequelize_1.Model {
+}
+Book.init({
     title: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     },
     author: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false
     },
     stock: {
-        type: sequelize_1.DataTypes.NUMBER
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0
     },
     isbn: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true
     }
 }, {
+    sequelize: connection_1.default,
+    modelName: 'Book',
     createdAt: false,
     updatedAt: false,
     tableName: 'book'

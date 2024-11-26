@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const book_1 = __importDefault(require("../routes/book"));
+const user_1 = __importDefault(require("../routes/user"));
 const auth_1 = __importDefault(require("../routes/auth"));
 const connection_1 = __importDefault(require("../db/connection"));
 const cors_1 = __importDefault(require("cors"));
@@ -38,6 +39,7 @@ class Server {
             });
         });
         this.app.use('/api/books', book_1.default);
+        this.app.use('/api/users', user_1.default);
         this.app.use('/auth', auth_1.default);
     }
     middlewares() {
