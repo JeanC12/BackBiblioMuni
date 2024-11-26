@@ -59,7 +59,7 @@ const postBook = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.log(error);
         res.json({
-            msg: `Ocurrió un error`
+            msg: `Ocurrió un error  ${error}`
         });
     }
 });

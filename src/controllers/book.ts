@@ -46,7 +46,7 @@ export const postBook = async (req: Request, res: Response) => {
     } catch (error) {
         console.log(error);
         res.json({
-            msg: `Ocurrió un error`
+            msg: `Ocurrió un error  ${error}`
         });
     }
 }
